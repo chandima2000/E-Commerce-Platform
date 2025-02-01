@@ -1,6 +1,5 @@
 package org.chandima.inventoryservice.controller;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.chandima.inventoryservice.service.InventoryService;
 import org.springframework.http.HttpStatus;
