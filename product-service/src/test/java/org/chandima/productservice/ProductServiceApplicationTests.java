@@ -1,15 +1,15 @@
 package org.chandima.productservice;
 
 import io.restassured.RestAssured;
-import io.restassured.matcher.ResponseAwareMatcher;
-import io.restassured.response.Response;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Import;
 import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.shaded.org.hamcrest.Matchers;
+import org.hamcrest.Matchers;
 
 @Import(TestcontainersConfiguration.class)
 
@@ -26,6 +26,7 @@ class ProductServiceApplicationTests {
 	@LocalServerPort
 	private Integer port;
 
+	@BeforeEach
 	// Setup REST-assured
 	void setup() {
 		RestAssured.baseURI = "http://localhost";
@@ -56,11 +57,23 @@ class ProductServiceApplicationTests {
 				.post("/api/product")
 				.then()
 				.statusCode(201)
-				.body("id", (ResponseAwareMatcher<Response>) Matchers.notNullValue())
-				.body("name", (ResponseAwareMatcher<Response>) Matchers.equalTo("iphone 16"))
-				.body("description", (ResponseAwareMatcher<Response>) Matchers.equalTo("iphone 16 is latest device"))
-				.body("price", (ResponseAwareMatcher<Response>) Matchers.equalTo(100));
+				.body("id", Matchers.notNullValue())
+				.body("name", Matchers.equalTo("iphone 16"))
+				.body("description",Matchers.equalTo("iphone 16 is latest device"))
+				.body("price", Matchers.equalTo(100));
 
+	}
+
+	@Test
+	void shouldGetAllProducts() {
+
+		RestAssured.given()
+				.when()
+				.get("/api/product")
+				.then()
+				.statusCode(200)
+				.body("size()", Matchers.greaterThan(0))
+				.body("[0].name", Matchers.equalTo("iphone 16"));
 	}
 
 }
