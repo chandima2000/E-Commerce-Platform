@@ -42,3 +42,4 @@ build/
 /data/
 /docker/tempo/tempo-data/
 /docker/tempo/tempo-data/
+/docker/keycloak/keycloak_data/
