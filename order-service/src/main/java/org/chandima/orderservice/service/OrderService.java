@@ -7,7 +7,6 @@ import org.chandima.orderservice.model.Order;
 import org.chandima.orderservice.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
-import javax.management.RuntimeErrorException;
 import java.util.UUID;
 
 @Service
@@ -20,28 +19,32 @@ public class OrderService {
 
     public void placeOrder(OrderRequst orderRequst) {
 
-        boolean isStockAvailable = inventoryClient.isInStock(orderRequst.skuCode(), orderRequst.quantity());
+        try {
+            boolean isStockAvailable = inventoryClient.isInStock(orderRequst.skuCode(), orderRequst.quantity());
 
-        //        Order order = new Order();
-        //        order.setOrderNumber(UUID.randomUUID().toString());
-        //        order.setPrice(orderRequst.price());
-        //        order.setSkuCode(orderRequst.skuCode());
-        //        order.setQuantity(orderRequst.quantity());
-        //        orderRepository.save(order);
+            //        Order order = new Order();
+            //        order.setOrderNumber(UUID.randomUUID().toString());
+            //        order.setPrice(orderRequst.price());
+            //        order.setSkuCode(orderRequst.skuCode());
+            //        order.setQuantity(orderRequst.quantity());
+            //        orderRepository.save(order);
 
-        if (isStockAvailable) {
-            // use the Builder Pattern
-            Order order = Order.builder()
-                    .orderNumber(UUID.randomUUID().toString())
-                    .price(orderRequst.price())
-                    .skuCode(orderRequst.skuCode())
-                    .quantity(orderRequst.quantity())
-                    .build();
+            if (isStockAvailable) {
+                // use the Builder Pattern
+                Order order = Order.builder()
+                        .orderNumber(UUID.randomUUID().toString())
+                        .price(orderRequst.price())
+                        .skuCode(orderRequst.skuCode())
+                        .quantity(orderRequst.quantity())
+                        .build();
 
-            orderRepository.save(order);
+                orderRepository.save(order);
+            } else {
+                throw new RuntimeException("Product with skuCode " + orderRequst.skuCode() + " is not available");
+            }
         }
-        else{
-            throw new RuntimeException("Product with skuCode "+orderRequst.skuCode()+" is not available");
+        catch (Exception e) {
+            throw new RuntimeException("Inventory Service is down. Please try again later.");
         }
 
 
