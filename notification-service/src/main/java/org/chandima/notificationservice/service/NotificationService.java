@@ -3,7 +3,7 @@ package org.chandima.notificationservice.service;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.chandima.notificationservice.event.OrderPlacedEvent;
+import org.chandima.notificationservice.schema.OrderPlacedEvent;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -26,10 +26,10 @@ public class NotificationService {
             MimeMessagePreparator messagePreparator = mimeMessage -> {
                 MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
                 messageHelper.setFrom("eshop@gmail.com");
-                messageHelper.setTo(orderPlacedEvent.getEmail());
+                messageHelper.setTo(orderPlacedEvent.getEmail().toString());
                 messageHelper.setSubject("New Order placed");
                 messageHelper.setText(String.format("""
-                                Hello %s,
+                                Hello %s %s,
                                 
                                 Your order %s is placed successfully.
                                 
@@ -37,8 +37,9 @@ public class NotificationService {
                                 E-Shop.
                                 
                                 """,
-                        orderPlacedEvent.getOrderNumber(),
-                        orderPlacedEvent.getEmail()
+                        orderPlacedEvent.getFirstName().toString(),
+                        orderPlacedEvent.getLastName().toString(),
+                        orderPlacedEvent.getOrderNumber().toString()
                 ));
             };
 
