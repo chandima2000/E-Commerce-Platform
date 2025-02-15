@@ -104,4 +104,11 @@ services:
       KAFKA_CLUSTERS_BOOTSTRAPSERVERS: broker:29092
       KAFKA_CLUSTERS_SCHEMAREGISTRY: http://schema-registry:8081
       DYNAMIC_CONFIG_ENABLED: 'true'
+
+  loki:
+    container_name: loki
+    image: grafana/loki:main
+    command: [ "-config.file=/etc/loki/local-config.yaml" ]
+    ports:
+      - "3100:3100"
   
