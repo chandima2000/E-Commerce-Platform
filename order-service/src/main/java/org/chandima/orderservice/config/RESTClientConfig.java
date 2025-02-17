@@ -1,5 +1,6 @@
 package org.chandima.orderservice.config;
 
+import io.micrometer.observation.ObservationRegistry;
 import lombok.RequiredArgsConstructor;
 import org.chandima.orderservice.client.InventoryClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -16,10 +17,13 @@ public class RESTClientConfig {
 
     private final InventoryPropertiesConfig inventoryServiceUrl;
 
+    private final ObservationRegistry observationRegistry;
+
     @Bean
     public InventoryClient inventoryClient() {
         RestClient restClient = RestClient.builder()
                 .baseUrl(inventoryServiceUrl.getUrl())
+                .observationRegistry(observationRegistry) // Propagate the Trace with Inventory-service
                 .build();
 
         RestClientAdapter restClientAdapter = RestClientAdapter.create(restClient);
