@@ -1,6 +1,6 @@
 package org.chandima.apigateway.api_routes;
 
-import org.springframework.cloud.gateway.server.mvc.handler.GatewayRouterFunctions;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,12 +19,21 @@ import static org.springframework.cloud.gateway.server.mvc.handler.GatewayRouter
 @Configuration
 public class APIGatewayRoutes {
 
+    @Value("${product.service.url}")
+    private String productServiceUrl;
+
+    @Value("${order.service.url}")
+    private String orderServiceUrl;
+
+    @Value("${inventory.service.url}")
+    private String inventoryServiceUrl;
+
     // Functional Endpoints Approach
 
     @Bean
     public RouterFunction<ServerResponse> productServiceRoutes(){
         return route("product-service")
-                .route(RequestPredicates.path("/api/product"), HandlerFunctions.http("http://localhost:8080"))
+                .route(RequestPredicates.path("/api/product"), HandlerFunctions.http(productServiceUrl))
                 .filter(circuitBreaker("productServiceCircuitBreaker",
                         URI.create("forward:/fallbackRoute")))
                 .build();
@@ -34,7 +43,7 @@ public class APIGatewayRoutes {
     @Bean
     public RouterFunction<ServerResponse> productServiceSwaggerRoutes() {
         return route("product-service-swagger")
-                .route(RequestPredicates.path("/aggregate/product-service/v3/api-docs"), HandlerFunctions.http("http://localhost:8080"))
+                .route(RequestPredicates.path("/aggregate/product-service/v3/api-docs"), HandlerFunctions.http(productServiceUrl))
                 .filter(circuitBreaker("productServiceSwaggerCircuitBreaker",
                         URI.create("forward:/fallbackRoute")))
                 .filter(setPath("/api-docs"))
@@ -46,7 +55,7 @@ public class APIGatewayRoutes {
     @Bean
     public RouterFunction<ServerResponse> orderServiceRoutes(){
         return route("order-service")
-                .route(RequestPredicates.path("/api/order"), HandlerFunctions.http("http://localhost:8081"))
+                .route(RequestPredicates.path("/api/order"), HandlerFunctions.http(orderServiceUrl))
                 .filter(circuitBreaker("orderServiceCircuitBreaker",
                         URI.create("forward:/fallbackRoute")))
                 .build();
@@ -57,7 +66,7 @@ public class APIGatewayRoutes {
     public RouterFunction<ServerResponse> orderServiceSwaggerRoutes() {
         return route("order-service-swagger")
                 .route(RequestPredicates.path("/aggregate/order-service/v3/api-docs"),
-                        HandlerFunctions.http("http://localhost:8081"))
+                        HandlerFunctions.http(orderServiceUrl))
                 .filter(circuitBreaker("orderServiceSwaggerCircuitBreaker",
                         URI.create("forward:/fallbackRoute")))
                 .filter(setPath("/api-docs"))
@@ -68,7 +77,7 @@ public class APIGatewayRoutes {
     public RouterFunction<ServerResponse> inventoryServiceRoutes(){
         return route("inventory-service")
                 .route(RequestPredicates.path("/api/inventory"),
-                        HandlerFunctions.http("http://localhost:8082"))
+                        HandlerFunctions.http(inventoryServiceUrl))
                 .filter(circuitBreaker("inventoryServiceCircuitBreaker",
                         URI.create("forward:/fallbackRoute")))
                 .build();
@@ -79,7 +88,7 @@ public class APIGatewayRoutes {
     public RouterFunction<ServerResponse> inventoryServiceSwaggerRoutes() {
         return route("inventory-service-swagger")
                 .route(RequestPredicates.path("/aggregate/inventory-service/v3/api-docs"),
-                        HandlerFunctions.http("http://localhost:8082"))
+                        HandlerFunctions.http(inventoryServiceUrl))
                 .filter(circuitBreaker("inventoryServiceSwaggerCircuitBreaker",
                         URI.create("forward:/fallbackRoute")))
                 .filter(setPath("/api-docs"))

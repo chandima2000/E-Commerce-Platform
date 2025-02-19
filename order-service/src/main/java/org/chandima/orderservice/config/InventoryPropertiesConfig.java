@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Getter
 @Setter
-@ConfigurationProperties(prefix = "inventory")
+@ConfigurationProperties(prefix = "inventory.service")
 public class InventoryPropertiesConfig {
 
     private String url;
