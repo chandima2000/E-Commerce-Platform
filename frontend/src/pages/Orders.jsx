@@ -1,171 +1,160 @@
-// import { useLocation, useNavigate } from "react-router-dom";
-// import { useState } from "react";
-
-// const Orders = () => {
-//   const location = useLocation();
-//   const navigate = useNavigate();
-//   const product = location.state?.product; // Get the product from navigation state
-//   const [quantity, setQuantity] = useState(1);
-
-//   if (!product) {
-//     return <div className="text-center text-red-600 text-lg mt-10">No product selected. Go back and choose a product.</div>;
-//   }
-
-//   const handlePlaceOrder = () => {
-//     const orderData = {
-//       productId: product.id,
-//       skuCode: product.name,
-//       totalPrice: product.price * quantity,
-//       quantity,
-      
-//     };
-
-//     console.log("Order Placed:", orderData);
-    
-//     // Redirect to success page
-//     navigate("/orders-success", { state: { orderData } });
-//   };
-
-//   return (
-//     <div className="container mx-auto py-10">
-//       <h2 className="text-3xl font-bold text-center text-blue-700 mb-6">Place Your Order</h2>
-//       <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
-//         <h3 className="text-xl font-semibold text-gray-800">{product.name}</h3>
-//         <p className="text-gray-600 mt-2">{product.description}</p>
-//         <span className="text-lg font-bold text-green-600 block mt-2">${product.price}</span>
-
-//         <div className="mt-4">
-//           <label className="block text-gray-700 font-medium">Quantity:</label>
-//           <input
-//             type="number"
-//             min="1"
-//             value={quantity}
-//             onChange={(e) => setQuantity(Number(e.target.value))}
-//             className="w-full border border-gray-300 rounded-lg p-2 mt-2"
-//           />
-//         </div>
-
-//         <button
-//           onClick={handlePlaceOrder}
-//           className="w-full mt-4 bg-green-600 hover:bg-green-800 text-white py-2 rounded-lg transition"
-//         >
-//           Place Order
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Orders;
-
-
-import { useLocation, useNavigate} from "react-router-dom";
 import { useState } from "react";
-import Swal from 'sweetalert2'
+import { useLocation } from "react-router-dom";
 
-const Orders = () => {
+const PlaceOrder = () => {
   const location = useLocation();
-  const navigate = useNavigate();
-  const product = location.state?.product; // Get selected product
-  const [quantity, setQuantity] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const product = location.state?.product || {};
 
-  if (!product) {
-    return <div className="text-center text-red-600 text-lg mt-10">No product selected. Go back and choose a product.</div>;
-  }
+  const [order, setOrder] = useState({
+    skuCode: product.skuCode || "",
+    price: product.price || "",
+    quantity: 1,
+    userDetails: {
+      email: "",
+      firstName: "",
+      lastName: "",
+    },
+  });
 
-  const handlePlaceOrder = async () => {
-    setLoading(true);
-    setError("");
+  const [message, setMessage] = useState("");
 
-    const orderData = {
-      skuCode: product.name,  
-      price: product.price * product.quantity,
-      quantity: quantity,
-    };
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name in order.userDetails) {
+      setOrder((prevOrder) => ({
+        ...prevOrder,
+        userDetails: {
+          ...prevOrder.userDetails,
+          [name]: value,
+        },
+      }));
+    } else {
+      setOrder({ ...order, [name]: value });
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      console.error("No access token found! User might not be authenticated.");
+      setMessage("Authentication error. Please log in again.");
+      return;
+    }
 
     try {
-      const token = localStorage.getItem("access_token");
-
-      if (!token) {
-        throw new Error("User not authenticated. No access token found.");
-      }
-
       const response = await fetch("http://localhost:9000/api/order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, 
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(orderData),
+        body: JSON.stringify({
+          skuCode: order.skuCode,
+          price: parseFloat(order.price),
+          quantity: parseInt(order.quantity),
+          userDetails: {
+            email: order.userDetails.email,
+            firstName: order.userDetails.firstName,
+            lastName: order.userDetails.lastName,
+          },
+        }),
       });
 
       if (!response.ok) {
-
-        Swal.fire({
-          title: 'Failed to place order!',
-          icon: 'error',
-          showConfirmButton: false,
-          timer: 2500
-        })
-
-        throw new Error(`Failed to place order: ${response.statusText}`);
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      const result = await response.text();
-
-      console.log("Order placed successfully:", result);
-
-      Swal.fire({
-        title: 'Order placed successfully',
-        icon: 'success',
-        showConfirmButton: false,
-        timer: 1500
-      })
-      
-      // Redirect to success page
-     navigate("/products");
-
+      setMessage("Order placed successfully!");
     } catch (error) {
       console.error("Error placing order:", error);
-      setError(error.message);
-    } finally {
-      setLoading(false);
+      setMessage("Failed to place order.");
     }
   };
 
   return (
-    <div className="container mx-auto py-10">
-      <h2 className="text-3xl font-bold text-center text-blue-700 mb-6">Place Your Order</h2>
-      <div className="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
-        <h3 className="text-xl font-semibold text-gray-800">{product.name}</h3>
-        <p className="text-gray-600 mt-2">{product.description}</p>
-        <span className="text-lg font-bold text-green-600 block mt-2">${product.price}</span>
-
-        <div className="mt-4">
-          <label className="block text-gray-700 font-medium">Quantity:</label>
+    <div className="max-w-md mx-auto bg-white p-6 rounded-lg shadow-md mt-10">
+      <h2 className="text-2xl font-bold mb-4 text-center text-blue-700">
+        Place Order
+      </h2>
+      {message && <p className="text-center text-red-500">{message}</p>}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-gray-700">Product SKU Code</label>
           <input
-            type="number"
-            min="1"
-            value={quantity}
-            onChange={(e) => setQuantity(Number(e.target.value))}
-            className="w-full border border-gray-300 rounded-lg p-2 mt-2"
+            type="text"
+            name="skuCode"
+            value={order.skuCode}
+            readOnly
+            className="w-full p-2 border rounded bg-gray-100"
           />
         </div>
-
-        {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
-
+        <div>
+          <label className="block text-gray-700">Price ($)</label>
+          <input
+            type="number"
+            name="price"
+            value={order.price}
+            readOnly
+            className="w-full p-2 border rounded bg-gray-100"
+          />
+        </div>
+        <div>
+          <label className="block text-gray-700">Quantity</label>
+          <input
+            type="number"
+            name="quantity"
+            value={order.quantity}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-gray-700">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={order.userDetails.email}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-gray-700">First Name</label>
+          <input
+            type="text"
+            name="firstName"
+            value={order.userDetails.firstName}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+            required
+          />
+        </div>
+        <div>
+          <label className="block text-gray-700">Last Name</label>
+          <input
+            type="text"
+            name="lastName"
+            value={order.userDetails.lastName}
+            onChange={handleChange}
+            className="w-full p-2 border rounded"
+            required
+          />
+        </div>
         <button
-          onClick={handlePlaceOrder}
-          className="w-full mt-4 bg-green-600 hover:bg-green-800 text-white py-2 rounded-lg transition"
-          disabled={loading}
+          type="submit"
+          className="w-full bg-blue-600 hover:bg-blue-800 text-white py-2 rounded"
         >
-          {loading ? "Placing Order..." : "Place Order"}
+          Place Order
         </button>
-      </div>
+      </form>
     </div>
   );
 };
 
-export default Orders;
+export default PlaceOrder;
