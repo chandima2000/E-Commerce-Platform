@@ -21,7 +21,7 @@ public class OrderService {
 
     private final InventoryClient inventoryClient;
 
-    KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
+    private final KafkaTemplate<String, OrderPlacedEvent> kafkaTemplate;
 
     public void placeOrder(OrderRequst orderRequst) {
 
@@ -63,11 +63,14 @@ public class OrderService {
             } else {
                 throw new RuntimeException("Product with skuCode " + orderRequst.skuCode() + " is not available");
             }
-        }
-        catch (Exception e) {
-            throw new RuntimeException("Inventory Service is down. Please try again later.");
-        }
 
+        } catch (RuntimeException e) {
+            log.error("Error placing order: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            log.error("Unexpected error: {}", e.getMessage());
+            throw new RuntimeException("Order placement failed due to an unexpected error.");
+        }
 
     }
 }
