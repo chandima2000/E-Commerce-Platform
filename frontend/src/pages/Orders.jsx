@@ -64,7 +64,7 @@ const PlaceOrder = () => {
         }),
       });
 
-      if (!response.ok) {
+      if (!response.status == 201) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
