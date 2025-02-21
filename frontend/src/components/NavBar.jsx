@@ -23,9 +23,6 @@ export default function Navbar() {
               <Link to="/products" className="hover:text-gray-200">
                 View Products
               </Link>
-              <Link to="/orders" className="hover:text-gray-200">
-                View Orders
-              </Link>
               <Link to="/create-product" className="hover:text-gray-200">
                 Create Product
               </Link>

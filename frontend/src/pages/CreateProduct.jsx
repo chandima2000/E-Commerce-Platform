@@ -1,4 +1,6 @@
 import { useState } from "react";
+import Swal from 'sweetalert2'
+
 
 const CreateProduct = () => {
   const [product, setProduct] = useState({
@@ -42,15 +44,32 @@ const CreateProduct = () => {
         }),
       });
 
-      if (!response.ok) {
+      if (!response.status == 201) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
+      Swal.fire({
+        title: 'Product created successfully!',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 2500
+      })
+
       setMessage("Product created successfully!");
       setProduct({ name: "", description: "", skuCode: "", price: "" });
+
     } catch (error) {
+
       console.error("Error creating product:", error);
-      setMessage("Failed to create product.");
+      setMessage("Failed to create product!");
+
+      Swal.fire({
+        title: 'Failed to create product!',
+        icon: 'error',
+        showConfirmButton: false,
+        timer: 2500
+      })
+
     }
   };
 

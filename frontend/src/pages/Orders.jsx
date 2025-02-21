@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import Swal from 'sweetalert2'
 
 const PlaceOrder = () => {
   const location = useLocation();
@@ -68,10 +69,27 @@ const PlaceOrder = () => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
+      Swal.fire({
+              title: 'Order placed successfully!',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 2500
+            })
+
       setMessage("Order placed successfully!");
+
     } catch (error) {
+
       console.error("Error placing order:", error);
-      setMessage("Failed to place order.");
+      setMessage("Error placing order!");
+
+      Swal.fire({
+        title: 'Failed to place order!',
+        icon: 'error',
+        showConfirmButton: false,
+        timer: 2500
+      })
+
     }
   };
 
