@@ -3,7 +3,7 @@
  *
  * DO NOT EDIT DIRECTLY
  */
-package org.chandima.notificationservice.schema;
+package org.chandima.common.schema;
 
 import org.apache.avro.specific.SpecificData;
 import org.apache.avro.util.Utf8;
@@ -13,10 +13,10 @@ import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
 public class OrderPlacedEvent extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -3212343171724505963L;
+  private static final long serialVersionUID = -6752609174429604044L;
 
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"OrderPlacedEvent\",\"namespace\":\"org.chandima.notificationservice.schema\",\"fields\":[{\"name\":\"orderNumber\",\"type\":\"string\"},{\"name\":\"email\",\"type\":\"string\"},{\"name\":\"firstName\",\"type\":\"string\"},{\"name\":\"lastName\",\"type\":\"string\"}]}");
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"OrderPlacedEvent\",\"namespace\":\"org.chandima.common.schema\",\"fields\":[{\"name\":\"orderNumber\",\"type\":\"string\"},{\"name\":\"email\",\"type\":\"string\"},{\"name\":\"firstName\",\"type\":\"string\"},{\"name\":\"lastName\",\"type\":\"string\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
 
   private static final SpecificData MODEL$ = new SpecificData();
@@ -201,8 +201,8 @@ public class OrderPlacedEvent extends org.apache.avro.specific.SpecificRecordBas
    * Creates a new OrderPlacedEvent RecordBuilder.
    * @return A new OrderPlacedEvent RecordBuilder
    */
-  public static org.chandima.notificationservice.schema.OrderPlacedEvent.Builder newBuilder() {
-    return new org.chandima.notificationservice.schema.OrderPlacedEvent.Builder();
+  public static org.chandima.common.schema.OrderPlacedEvent.Builder newBuilder() {
+    return new org.chandima.common.schema.OrderPlacedEvent.Builder();
   }
 
   /**
@@ -210,11 +210,11 @@ public class OrderPlacedEvent extends org.apache.avro.specific.SpecificRecordBas
    * @param other The existing builder to copy.
    * @return A new OrderPlacedEvent RecordBuilder
    */
-  public static org.chandima.notificationservice.schema.OrderPlacedEvent.Builder newBuilder(org.chandima.notificationservice.schema.OrderPlacedEvent.Builder other) {
+  public static org.chandima.common.schema.OrderPlacedEvent.Builder newBuilder(org.chandima.common.schema.OrderPlacedEvent.Builder other) {
     if (other == null) {
-      return new org.chandima.notificationservice.schema.OrderPlacedEvent.Builder();
+      return new org.chandima.common.schema.OrderPlacedEvent.Builder();
     } else {
-      return new org.chandima.notificationservice.schema.OrderPlacedEvent.Builder(other);
+      return new org.chandima.common.schema.OrderPlacedEvent.Builder(other);
     }
   }
 
@@ -223,11 +223,11 @@ public class OrderPlacedEvent extends org.apache.avro.specific.SpecificRecordBas
    * @param other The existing instance to copy.
    * @return A new OrderPlacedEvent RecordBuilder
    */
-  public static org.chandima.notificationservice.schema.OrderPlacedEvent.Builder newBuilder(org.chandima.notificationservice.schema.OrderPlacedEvent other) {
+  public static org.chandima.common.schema.OrderPlacedEvent.Builder newBuilder(org.chandima.common.schema.OrderPlacedEvent other) {
     if (other == null) {
-      return new org.chandima.notificationservice.schema.OrderPlacedEvent.Builder();
+      return new org.chandima.common.schema.OrderPlacedEvent.Builder();
     } else {
-      return new org.chandima.notificationservice.schema.OrderPlacedEvent.Builder(other);
+      return new org.chandima.common.schema.OrderPlacedEvent.Builder(other);
     }
   }
 
@@ -252,7 +252,7 @@ public class OrderPlacedEvent extends org.apache.avro.specific.SpecificRecordBas
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(org.chandima.notificationservice.schema.OrderPlacedEvent.Builder other) {
+    private Builder(org.chandima.common.schema.OrderPlacedEvent.Builder other) {
       super(other);
       if (isValidValue(fields()[0], other.orderNumber)) {
         this.orderNumber = data().deepCopy(fields()[0].schema(), other.orderNumber);
@@ -276,7 +276,7 @@ public class OrderPlacedEvent extends org.apache.avro.specific.SpecificRecordBas
      * Creates a Builder by copying an existing OrderPlacedEvent instance
      * @param other The existing instance to copy.
      */
-    private Builder(org.chandima.notificationservice.schema.OrderPlacedEvent other) {
+    private Builder(org.chandima.common.schema.OrderPlacedEvent other) {
       super(SCHEMA$, MODEL$);
       if (isValidValue(fields()[0], other.orderNumber)) {
         this.orderNumber = data().deepCopy(fields()[0].schema(), other.orderNumber);
@@ -310,7 +310,7 @@ public class OrderPlacedEvent extends org.apache.avro.specific.SpecificRecordBas
       * @param value The value of 'orderNumber'.
       * @return This builder.
       */
-    public org.chandima.notificationservice.schema.OrderPlacedEvent.Builder setOrderNumber(java.lang.CharSequence value) {
+    public org.chandima.common.schema.OrderPlacedEvent.Builder setOrderNumber(java.lang.CharSequence value) {
       validate(fields()[0], value);
       this.orderNumber = value;
       fieldSetFlags()[0] = true;
@@ -330,7 +330,7 @@ public class OrderPlacedEvent extends org.apache.avro.specific.SpecificRecordBas
       * Clears the value of the 'orderNumber' field.
       * @return This builder.
       */
-    public org.chandima.notificationservice.schema.OrderPlacedEvent.Builder clearOrderNumber() {
+    public org.chandima.common.schema.OrderPlacedEvent.Builder clearOrderNumber() {
       orderNumber = null;
       fieldSetFlags()[0] = false;
       return this;
@@ -350,7 +350,7 @@ public class OrderPlacedEvent extends org.apache.avro.specific.SpecificRecordBas
       * @param value The value of 'email'.
       * @return This builder.
       */
-    public org.chandima.notificationservice.schema.OrderPlacedEvent.Builder setEmail(java.lang.CharSequence value) {
+    public org.chandima.common.schema.OrderPlacedEvent.Builder setEmail(java.lang.CharSequence value) {
       validate(fields()[1], value);
       this.email = value;
       fieldSetFlags()[1] = true;
@@ -370,7 +370,7 @@ public class OrderPlacedEvent extends org.apache.avro.specific.SpecificRecordBas
       * Clears the value of the 'email' field.
       * @return This builder.
       */
-    public org.chandima.notificationservice.schema.OrderPlacedEvent.Builder clearEmail() {
+    public org.chandima.common.schema.OrderPlacedEvent.Builder clearEmail() {
       email = null;
       fieldSetFlags()[1] = false;
       return this;
@@ -390,7 +390,7 @@ public class OrderPlacedEvent extends org.apache.avro.specific.SpecificRecordBas
       * @param value The value of 'firstName'.
       * @return This builder.
       */
-    public org.chandima.notificationservice.schema.OrderPlacedEvent.Builder setFirstName(java.lang.CharSequence value) {
+    public org.chandima.common.schema.OrderPlacedEvent.Builder setFirstName(java.lang.CharSequence value) {
       validate(fields()[2], value);
       this.firstName = value;
       fieldSetFlags()[2] = true;
@@ -410,7 +410,7 @@ public class OrderPlacedEvent extends org.apache.avro.specific.SpecificRecordBas
       * Clears the value of the 'firstName' field.
       * @return This builder.
       */
-    public org.chandima.notificationservice.schema.OrderPlacedEvent.Builder clearFirstName() {
+    public org.chandima.common.schema.OrderPlacedEvent.Builder clearFirstName() {
       firstName = null;
       fieldSetFlags()[2] = false;
       return this;
@@ -430,7 +430,7 @@ public class OrderPlacedEvent extends org.apache.avro.specific.SpecificRecordBas
       * @param value The value of 'lastName'.
       * @return This builder.
       */
-    public org.chandima.notificationservice.schema.OrderPlacedEvent.Builder setLastName(java.lang.CharSequence value) {
+    public org.chandima.common.schema.OrderPlacedEvent.Builder setLastName(java.lang.CharSequence value) {
       validate(fields()[3], value);
       this.lastName = value;
       fieldSetFlags()[3] = true;
@@ -450,7 +450,7 @@ public class OrderPlacedEvent extends org.apache.avro.specific.SpecificRecordBas
       * Clears the value of the 'lastName' field.
       * @return This builder.
       */
-    public org.chandima.notificationservice.schema.OrderPlacedEvent.Builder clearLastName() {
+    public org.chandima.common.schema.OrderPlacedEvent.Builder clearLastName() {
       lastName = null;
       fieldSetFlags()[3] = false;
       return this;

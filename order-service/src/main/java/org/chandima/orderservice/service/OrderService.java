@@ -2,9 +2,10 @@ package org.chandima.orderservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.chandima.common.schema.OrderPlacedEvent;
 import org.chandima.orderservice.client.InventoryClient;
 import org.chandima.orderservice.dto.OrderRequst;
-import org.chandima.orderservice.schema.OrderPlacedEvent;
+//import org.chandima.orderservice.schema.OrderPlacedEvent;
 import org.chandima.orderservice.model.Order;
 import org.chandima.orderservice.repository.OrderRepository;
 import org.springframework.kafka.core.KafkaTemplate;

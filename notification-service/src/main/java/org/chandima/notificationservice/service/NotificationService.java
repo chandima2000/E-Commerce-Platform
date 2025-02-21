@@ -3,7 +3,8 @@ package org.chandima.notificationservice.service;
 import lombok.RequiredArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
-import org.chandima.notificationservice.schema.OrderPlacedEvent;
+import org.chandima.common.schema.OrderPlacedEvent;
+//import org.chandima.notificationservice.schema.OrderPlacedEvent;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -44,6 +45,7 @@ public class NotificationService {
             };
 
             javaMailSender.send(messagePreparator);
+            log.info("Email sent successfully");
 
         }catch(MailSendException e){
             log.error("An Error is occurred during sending the Email : ",e.getMessage());
