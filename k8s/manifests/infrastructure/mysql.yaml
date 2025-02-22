@@ -19,7 +19,12 @@ spec:
           name: mysql
           ports:
             - containerPort: 3306
-          resources: {}
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: mysql_root_password
+                  name: mysql-secrets
 
 ---
 
@@ -37,3 +42,11 @@ spec:
   selector:
     app: mysql
 
+---
+
+apiVersion: v1
+data:
+  mysql_root_password: bXlzcWw=
+kind: Secret
+metadata:
+  name: mysql-secrets
